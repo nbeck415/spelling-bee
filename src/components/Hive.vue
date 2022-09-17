@@ -26,17 +26,15 @@ const otherLetters = ref(
 let userGuess = ref("");
 
 const onKeyPress = (e: KeyboardEvent) => {
-  if (e.key == "Enter") {
-    submitGuess({ $t: t, guess: userGuess.value });
-  } else if (e.key == "Backspace") {
+  const key = e.key.toLowerCase();
+  if (key === "enter") return submitGuess({ $t: t, guess: userGuess.value });
+  if (key === "backspace") {
     userGuess.value = userGuess.value.slice(0, -1);
-  } else {
-    const letter = e.key.toLowerCase();
-    if (store.availableLetters.split("").includes(letter)) {
-      userGuess.value += letter;
-    } else {
-      console.log(letter + " is not in " + store.availableLetters.split(""));
-    }
+    return false;
+  }
+  if (key.length === 1 && store.availableLetters.includes(key)) {
+    userGuess.value += key;
+    return true;
   }
 };
 
